@@ -3,7 +3,7 @@ var gpio = require("pi-gpio");
 var intervalId = 0;
 var durationId = 0;
 
-var intervalTime = 0;
+var intervalTime = 50;
 
 exports.initialize = function (gpioPin1, gpioPin2, scb, ecb)  {
 	gpio.open(gpioPin1, 'input', function(err) {
