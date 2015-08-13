@@ -44,7 +44,7 @@ function getValue(gpioPin, scb, ecb) {
 }
 
 var observation = []; // for containing sensing observations at the same time
-
+var startFlag = false;
 exports.readValuesAsync = function (port) {
 	//console.log('reading at ' + port);
 	getValue(port, function (value) {
@@ -60,13 +60,26 @@ exports.readValuesAsync = function (port) {
 				var sensor2 =  observation[1].value;
 				var d = new Date();
 				if (sensor1 === 1 && sensor2 === 0) {
-					console.log(d.toLocaleTimeString() + ' : pattern A');
+					//console.log(d.toLocaleTimeString() + ' : pattern A');
+          if(startFlag) {
+              console.log('someone entered');
+          }
+          startFlag = false;
+
 				}  else if (sensor1 === 0 && sensor2 === 1) {
-					console.log(d.toLocaleTimeString() + ' : pattern B');
+					//console.log(d.toLocaleTimeString() + ' : pattern B');
+          if(startFlag) {
+              console.log('someone exited');
+          }
+          startFlag = false;
+
 				}  else if ( sensor1 === 0 && sensor2 === 0) {
-					console.log(d.toLocaleTimeString() + ' : pattern C');
+					//console.log(d.toLocaleTimeString() + ' : pattern C');
+          // set start condition here
+          startFlag = true;
 				} else {
 					// skip if two sensor value is same as 1
+          startFlag = false;
 				}
 				observation = []; // reset
 			}
