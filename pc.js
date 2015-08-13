@@ -54,10 +54,10 @@ exports.readValuesAsync = function (port) {
 			//console.log(JSON.stringify(obs));
 			observation.push(obs);
 			if(observation.length == 2) {
-				/*
+
 				console.log(JSON.stringify(observations[0]) + ":" +
 					JSON.stringify(observations[1]));
-				*/
+				
 				var sensor1 = observation[0].value;
 				var sensor2 =  observation[1].value;
 				var d = new Date();
