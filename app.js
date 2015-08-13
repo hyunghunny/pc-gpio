@@ -23,7 +23,6 @@ people_counter.initialize(gpioPin1, gpioPin2, function() {
 });
 
 
-
 function readSignalsInfinite() {
 	setInterval(function() {
 		var ports = [gpioPin1, gpioPin2];

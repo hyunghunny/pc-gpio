@@ -43,32 +43,32 @@ function getValue(gpioPin, scb, ecb) {
 	});
 }
 
-var observations = []; // for containing sensing observations
+var observation = []; // for containing sensing observations at the same time
 
 exports.readValuesAsync = function (port) {
 	//console.log('reading at ' + port);
 	getValue(port, function (value) {
 			var obs = { "pin" : port , "value" : value };
 			//console.log(JSON.stringify(obs));
-			observations.push(obs);
-			if(observations.length == 2) {
+			observation.push(obs);
+			if(pass.length == 2) {
 				/*
 				console.log(JSON.stringify(observations[0]) + ":" +
 					JSON.stringify(observations[1]));
 				*/
-				var sensor1 = observations[0].value;
-				var sensor2 =  observations[1].value;
+				var sensor1 = observation[0].value;
+				var sensor2 =  observation[1].value;
 				var d = new Date();
-				if (sensor1 > sensor2) {
+				if (sensor1 === 1 && sensor2 === 0) {
 					console.log(d.toLocaleTimeString() + ' : pattern A');
-				}  else if (sensor1 < sensor2) {
+				}  else if (sensor1 === 0 && sensor2 === 1) {
 					console.log(d.toLocaleTimeString() + ' : pattern B');
-				}  else if ( sensor1 == 0 && sensor2 == 0) {
+				}  else if ( sensor1 === 0 && sensor2 === 0) {
 					console.log(d.toLocaleTimeString() + ' : pattern C');
 				} else {
 					// skip if two sensor value is same as 1
 				}
-				observations = []; // reset
+				observation = []; // reset
 			}
 		},
 		function() {
