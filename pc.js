@@ -62,14 +62,14 @@ exports.readValuesAsync = function (port) {
 				if (sensor1 === 1 && sensor2 === 0) {
 					//console.log(d.toLocaleTimeString() + ' : pattern A');
           if(startFlag) {
-              console.log('someone entered');
+              console.log('someone entered at ' + d.toLocaleTimeString());
           }
           startFlag = false;
 
 				}  else if (sensor1 === 0 && sensor2 === 1) {
 					//console.log(d.toLocaleTimeString() + ' : pattern B');
           if(startFlag) {
-              console.log('someone exited');
+              console.log('someone exited at ' + d.toLocaleTimeString());
           }
           startFlag = false;
 
