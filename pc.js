@@ -46,7 +46,7 @@ function getValue(gpioPin, scb, ecb) {
 var observation = []; // for containing sensing observations at the same time
 var startFlag = false;
 var lastUpdated = 0; // previous updated time
-var timespan = 500; //  for ignoring rapid updates
+var timespan = 1000; //  for ignoring rapid updates
 exports.readValuesAsync = function (port) {
 	//console.log('reading at ' + port);
 	getValue(port, function (value) {
