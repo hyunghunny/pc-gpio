@@ -51,7 +51,7 @@ exports.readValuesAsync = function (port) {
 			var obs = { "pin" : port , "value" : value };
 			//console.log(JSON.stringify(obs));
 			observation.push(obs);
-			if(pass.length == 2) {
+			if(observation.length == 2) {
 				/*
 				console.log(JSON.stringify(observations[0]) + ":" +
 					JSON.stringify(observations[1]));
