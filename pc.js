@@ -45,6 +45,8 @@ function getValue(gpioPin, scb, ecb) {
 
 var observation = []; // for containing sensing observations at the same time
 var startFlag = false;
+var lastUpdated = 0; // previous updated time
+var timespan = 500; //  for ignoring rapid updates
 exports.readValuesAsync = function (port) {
 	//console.log('reading at ' + port);
 	getValue(port, function (value) {
@@ -62,14 +64,20 @@ exports.readValuesAsync = function (port) {
 				if (sensor1 === 1 && sensor2 === 0) {
 					//console.log(d.toLocaleTimeString() + ' : pattern A');
           if(startFlag) {
+              if (d.getTime() - lastUpdated > timespan) {
               console.log('someone entered at ' + d.toLocaleTimeString());
+              lastUpdated = d.getTime();
+              }
           }
           startFlag = false;
 
 				}  else if (sensor1 === 0 && sensor2 === 1) {
 					//console.log(d.toLocaleTimeString() + ' : pattern B');
           if(startFlag) {
+            if (d.getTime() - lastUpdated > timespan) {
               console.log('someone exited at ' + d.toLocaleTimeString());
+              lastUpdated = d.getTime();
+            }
           }
           startFlag = false;
 
