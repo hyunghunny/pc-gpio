@@ -46,7 +46,7 @@ function getValue(gpioPin, scb, ecb) {
 var observation = []; // for containing sensing observations at the same time
 var startFlag = false;
 var lastUpdated = 0; // previous updated time
-var timespan = 500; //  for ignoring rapid updates
+var timespan = 200; //  for ignoring rapid updates
 exports.readValuesAsync = function (port) {
 	//console.log('reading at ' + port);
 	getValue(port, function (value) {
@@ -54,10 +54,10 @@ exports.readValuesAsync = function (port) {
 			//console.log(JSON.stringify(obs));
 			observation.push(obs);
 			if(observation.length == 2) {
-
+        /*
 				console.log(JSON.stringify(observation[0]) + ":" +
 					JSON.stringify(observation[1]));
-
+        */
 				var sensor1 = observation[0].value;
 				var sensor2 =  observation[1].value;
 				var d = new Date();
