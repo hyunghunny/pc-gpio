@@ -6,7 +6,7 @@
 # description: Description of the Service
 #
 # Below is the source function library, leave it be
-. /etc/init.d/functions
+#. /etc/init.d/functions
 
 # result of whereis forever or whereis node
 export PATH=$PATH:/usr/local/bin
@@ -23,7 +23,7 @@ stop(){
 }
 
 restart(){
-        (cd /home/pi/git/pc-gpio/ && exec forever restart app.js)        
+        (cd /home/pi/git/pc-gpio/ && exec forever restart app.js)
 }
 
 case "$1" in
