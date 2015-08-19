@@ -1,5 +1,5 @@
 var gpio = require("pi-gpio");
-var dbMgr = require("dbmanager");
+var dbMgr = require("./dbmanager.js");
 
 var intervalId = 0;
 var durationId = 0;
