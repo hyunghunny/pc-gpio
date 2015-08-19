@@ -1,132 +1,69 @@
-﻿var database = null;
-var table = '';
-var databaseType = '';
 
-exports.create = function (type, tableName, scb, ecb) {
-    if (type == 'ibeacon') database = require('./ibeaconDB.js');
-    if (type == 'distance') database = require('./distanceDB.js');
-    if (type == 'sound') database = require('./soundDB.js');
-    if (type == 'people_counter') database = require('./pcDB.js');
+function DBManager(type) {
+  if (type == 'ibeacon') {
+    this.database = require('./ibeaconDB.js');
+  } else if (type == 'distance') {
+    this.database = require('./distanceDB.js');
+  } else if (type == 'sound') {
+    this.database = require('./soundDB.js');
+  } else if (type == 'people_counter') {
+    this.database = require('./pcDB.js');
+  }
+  if (!this.database.hasDB()) {
+    this.database.createFile(); // data base file creation
+  } else {
+    this.database.openFile();
+  }
 
-    if (!database.hasDB())
-        database.createFile(); // data base file creation
-    else if (database.hasDB())
-        database.openFile();
-    database.createTable(tableName);// data base table creation if not exists
-    table = database.getTableName();
-    databaseType = database.getDBType();
+  this.databaseType = type;
+
 }
 
-exports.save = function (timestamp, obj, tableName, cb) {
-    if (typeof tableName === 'string')
-        database.setTableName(tableName)
-    if (databaseType == '')
-        cb('error');
-    if (databaseType == 'ibeacon')
-        database.insert(timestamp, obj.uuid, obj.accuracy);
-    if (databaseType == 'distance')
-        database.insert(timestamp, obj);
-    if (databaseType == 'sound')
-        database.insert(timestamp, obj);
-    if (databaseType == 'people_counter')
-        database.insert(timestamp, obj);
-    // XXX: why don't you callback on success condition?
-    cb();
+DBManager.prototype.setTable = function (tableName) {
+
+    this.database.createTable(tableName);// data base table creation if not exists
+    this.database.setTableName(tableName);
 }
 
-exports.list = function () {
-    database.showTableNames();
+DBManager.prototype.save = function (timestamp, obj) {
+  // TODO:check database is ready
+  if (this.database.getTableName() == '') {
+    return false;
+  }
+  if (this.databaseType == 'ibeacon') {
+        this.database.insert(timestamp, obj.uuid, obj.accuracy);
+  } else {
+      this.database.insert(timestamp, obj);
+  }
+  return true;
 }
-exports.inquire = function (condition, tableName, cb) {
-    // TODO:refactoring required
-    if (typeof tableName === 'string')
-        database.setTableName(tableName)
-    if (typeof condition === 'string') {
-        if (databaseType == 'ibeacon') {
-            database.find(function (rows) {
-                if (rows.length != 0) {
-                    rows.forEach(function (row) {
-                        //print out results
-                        console.log(row.Timestamp + " " + row.UUID + ", " + row.Distance);
-                    });
-                }
-            }, condition);
-        }
-        if (databaseType == 'distance') {
-            database.find(function (rows) {
-                if (rows.length != 0) {
-                    rows.forEach(function (row) {
-                        //print out results
-                        console.log(row.Timestamp + " " + row.cm);
-                    });
-                }
-            }, condition);
-        }
-        if (databaseType == 'sound') {
-            database.find(function (rows) {
-                if (rows.length != 0) {
-                    rows.forEach(function (row) {
-                        //print out results
-                        console.log(row.Timestamp + " " + row.volume);
-                    });
-                }
-            }, condition);
-        }
-        if (databaseType == 'people_counter') {
-            database.find(function (rows) {
-                if (rows.length != 0) {
-                    rows.forEach(function (row) {
-                        //print out results
-                        console.log(row.timestamp + " " + row.value);
-                    });
-                }
-            }, condition);
-        }
-    }
-    else {
-        if (databaseType == 'ibeacon') {
-            database.find(function (rows) {
-                if (rows.length != 0) {
-                    rows.forEach(function (row) {
-                        //print out results
-                        console.log(row.Timestamp + " " + row.UUID + ", " + row.Distance);
-                    });
-                }
-            });
-        }
-        if (databaseType == 'distance') {
-            database.find(function (rows) {
-                if (rows.length != 0) {
-                    rows.forEach(function (row) {
-                        //print out results
-                        console.log(row.Timestamp + " " + row.cm);
-                    });
-                }
-            }, condition);
-        }
-        if (databaseType == 'sound') {
-            database.find(function (rows) {
-                if (rows.length != 0) {
-                    rows.forEach(function (row) {
-                        //print out results
-                        console.log(row.Timestamp + " " + row.volume);
-                    });
-                }
-            }, condition);
-        }
-        if (databaseType == 'people_counter') {
-            database.find(function (rows) {
-                if (rows.length != 0) {
-                    rows.forEach(function (row) {
-                        //print out results
-                        console.log(row.timestamp + " " + row.value);
-                    });
-                }
-            }, condition);
-        }
-    }
+
+DBManager.prototype.list = function () {
+    this.database.showTableNames();
 }
-exports.close = function () {
-    database.closeDB();
+
+DBManager.prototype.inquire = function (condition, cb) {
+  // TODO:check database is ready
+  if (this.database.getTableName() == '') {
+    cb(false);
+    return;
+  }
+  // TODO:creating appropriate condition required
+
+  if (typeof condition === 'string') {
+      this.database.find(function (rows) {
+          cb(rows);
+      }, condition);
+  } else {
+    this.database.find(function (rows) {
+        cb(rows);
+    });
+  }
+
+}
+DBManager.prototype.close = function () {
+    this.database.closeDB();
     console.log('database closed');
 }
+
+module.exports = new DBManager('people_counter');

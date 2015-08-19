@@ -1,9 +1,14 @@
 var gpio = require("pi-gpio");
+var dbMgr = require("dbmanager");
 
 var intervalId = 0;
 var durationId = 0;
 
 var intervalTime = 50;
+
+// initialize DB manager
+dgMgr.setTable('606-1');
+
 
 exports.initialize = function (gpioPin1, gpioPin2, scb, ecb)  {
 	gpio.open(gpioPin1, 'input', function(err) {
@@ -66,16 +71,18 @@ exports.readValuesAsync = function (port) {
           if(startFlag) {
               if (d.getTime() - lastUpdated > timespan) {
               console.log('someone entered at ' + d.toLocaleTimeString());
+							dbMgr.save(d, 1);
               lastUpdated = d.getTime();
               }
           }
           startFlag = false;
 
-				}  else if (sensor1 === 0 && sensor2 === 1) {
+				} else if (sensor1 === 0 && sensor2 === 1) {
 					//console.log(d.toLocaleTimeString() + ' : pattern B');
           if(startFlag) {
             if (d.getTime() - lastUpdated > timespan) {
               console.log('someone exited at ' + d.toLocaleTimeString());
+							dbMgr.save(d, -1);
               lastUpdated = d.getTime();
             }
           }
