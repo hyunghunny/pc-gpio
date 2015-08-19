@@ -15,15 +15,15 @@ export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
 
 
 start(){
-        forever start /home/pi/git/pc-gpio/app.js
+        (cd /home/pi/git/pc-gpio/ && exec forever start app.js)
 }
 
 stop(){
-        forever stop /home/pi/git/pc-gpio/app.js
+        (cd /home/pi/git/pc-gpio/ && exec forever stop app.js)
 }
 
 restart(){
-        forever restart /home/pi/git/pc-gpio/app.js
+        (cd /home/pi/git/pc-gpio/ && exec forever restart app.js)        
 }
 
 case "$1" in

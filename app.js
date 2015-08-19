@@ -1,5 +1,7 @@
 var people_counter = require("./pc.js");
-
+var dbMgr = require("./dbmanager.js");
+// initialize DB manager
+dbMgr.setTable('adsl1');
 
 var gpioPin1 = 16; // #23
 var gpioPin2 = 18; // #24
@@ -29,7 +31,9 @@ function readSignalsInfinite() {
 		//console.log('try to read sensor values...');
 		for (var i = 0; i < ports.length; i++) {
 			//console.log('try to read value at ' + ports[i]);
-			people_counter.readValuesAsync(ports[i]);
+			people_counter.readValuesAsync(ports[i], function (timestamp, value) {
+				dbMgr.save(timestamp, value);
+			});
 		}
 	}
 	, intervalTime);

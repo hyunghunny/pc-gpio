@@ -1,13 +1,10 @@
 var gpio = require("pi-gpio");
-var dbMgr = require("./dbmanager.js");
+
 
 var intervalId = 0;
 var durationId = 0;
 
 var intervalTime = 50;
-
-// initialize DB manager
-dbMgr.setTable('adsl1');
 
 
 exports.initialize = function (gpioPin1, gpioPin2, scb, ecb)  {
@@ -52,7 +49,7 @@ var observation = []; // for containing sensing observations at the same time
 var startFlag = false;
 var lastUpdated = 0; // previous updated time
 var timespan = 1000; //  for ignoring rapid updates
-exports.readValuesAsync = function (port) {
+exports.readValuesAsync = function (port, cb) {
 	//console.log('reading at ' + port);
 	getValue(port, function (value) {
 			var obs = { "pin" : port , "value" : value };
@@ -71,7 +68,7 @@ exports.readValuesAsync = function (port) {
           if(startFlag) {
               if (d.getTime() - lastUpdated > timespan) {
               console.log('someone entered at ' + d.toLocaleTimeString());
-							dbMgr.save(d, 1);
+							cb(d, 1);
               lastUpdated = d.getTime();
               }
           }
@@ -82,7 +79,7 @@ exports.readValuesAsync = function (port) {
           if(startFlag) {
             if (d.getTime() - lastUpdated > timespan) {
               console.log('someone exited at ' + d.toLocaleTimeString());
-							dbMgr.save(d, -1);
+							cb(d, -1);
               lastUpdated = d.getTime();
             }
           }
