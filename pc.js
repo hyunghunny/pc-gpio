@@ -7,7 +7,7 @@ var durationId = 0;
 var intervalTime = 50;
 
 // initialize DB manager
-dgMgr.setTable('606-1');
+dbMgr.setTable('606-1');
 
 
 exports.initialize = function (gpioPin1, gpioPin2, scb, ecb)  {
