@@ -69,13 +69,16 @@ var RESTTransmitter = (function () {
 
     RESTTransmitter.prototype.getSensorUri = function (userId, sensorId) {
         var targetUri = '/' + userId + '/' + sensorId;
+        /*
+        // XXX:remove this routine temporary
         for (var i = 0; i < this.apis.length; i++) {
             var api = this.apis[i];
             if (api.href == targetUri) {
                 return targetUri;
             }
-        }
-        return "";
+        } */
+
+        return targetUri;
     };
 
     RESTTransmitter.prototype.emit = function (sensorId, observations, cb) {
