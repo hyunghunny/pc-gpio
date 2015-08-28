@@ -42,23 +42,26 @@ function readSignalsInfinite() {
 	, intervalTime);
 }
 
+var observations = [];
 function transmit(timestamp, value) {
 
 	var obs = {
 		"datePublished": timestamp,
 		"value" : value
 	}
-	var observations = [ obs ];
+	observations.push(obs);
   var id = 'webofthink';
 	var password = '';
-	var sensorUid = 22; // people counter
 
 	sensorchart.login(id, password, function (transmitter) {
 	    if (transmitter) {
+				var sensorUid = 22; // people counter
 	        transmitter.emit(sensorId, observations, function (result) {
 	            if (result == false) {
 	                console.log('failed to transmit observations.');
-	            }
+	            } else {
+								observations = []; // reset 
+							}
 	        });
 	    } else {
 	        console.log('login error!');
