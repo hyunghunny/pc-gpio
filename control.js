@@ -3,14 +3,12 @@ var dbMgr = require("./dbmanager.js");
 var sensorchart = require("./sensorchart.js");
 var intervalTime = 0;
 
+var gpioPin1 = 16; // #23
+var gpioPin2 = 18; // #24
+
 exports.run = function () {
 	// initialize DB manager
 	dbMgr.setTable('adsl1');
-
-	var gpioPin1 = 16; // #23
-	var gpioPin2 = 18; // #24
-
-
 
 	people_counter.cleanup(gpioPin1, gpioPin2); // release ports if it was used.
 
