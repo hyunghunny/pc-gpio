@@ -1,6 +1,6 @@
 var people_counter = require("./pc.js");
 var dbMgr = require("./dbmanager.js");
-var sensorchart = require("http://adsl.snu.ac.kr:3000/api.js");
+var sensorchart = require("./sensorchart.js");
 
 exports.run = function () {
 	// initialize DB manager
