@@ -55,12 +55,12 @@ function transmit(timestamp, value) {
 
 	sensorchart.login(id, password, function (transmitter) {
 	    if (transmitter) {
-				var sensorUid = 22; // people counter
+				var sensorId = 22; // people counter
 	        transmitter.emit(sensorId, observations, function (result) {
 	            if (result == false) {
 	                console.log('failed to transmit observations.');
 	            } else {
-								observations = []; // reset 
+								observations = []; // reset
 							}
 	        });
 	    } else {
