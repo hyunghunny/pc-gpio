@@ -1,6 +1,7 @@
 var people_counter = require("./pc.js");
 var dbMgr = require("./dbmanager.js");
 var sensorchart = require("./sensorchart.js");
+var intervalTime = 0;
 
 exports.run = function () {
 	// initialize DB manager
@@ -9,7 +10,7 @@ exports.run = function () {
 	var gpioPin1 = 16; // #23
 	var gpioPin2 = 18; // #24
 
-	var intervalTime = 0;
+
 
 	people_counter.cleanup(gpioPin1, gpioPin2); // release ports if it was used.
 
