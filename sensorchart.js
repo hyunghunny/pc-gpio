@@ -29,7 +29,7 @@ var logger = {
             console.log('[INFO] ' + message);
     }
 };
-logger.flag = 0 /* All */;
+logger.flag = 1 /* Critical */;
 
 var RESTTransmitter = (function () {
     function RESTTransmitter(baseUrl) {

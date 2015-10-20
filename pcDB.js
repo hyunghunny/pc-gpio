@@ -42,7 +42,7 @@ exports.insert = function (timestamp, value) {
         var query = "INSERT INTO " + table + "(timestamp,value) VALUES (?,?)";
         var stmt = database.prepare(query);
         stmt.run(timestamp, value, function () {
-            console.log(timestamp + ", " + value);
+            //console.log(timestamp + ", " + value);
         });
         stmt.finalize();
     });
@@ -79,7 +79,7 @@ exports.getTableName = function () {
     if (table == '')
         console.log('Table is not loaded');
     else {
-        console.log('Table ' + table + ' loaded');
+//        console.log('Table ' + table + ' loaded');
         return table;
     }
 }
