@@ -13,11 +13,13 @@ exports.initialize = function (gpioPin1, gpioPin2, scb, ecb)  {
 			console.log(gpioPin1 + ' port open error: ' + err);
 			ecb();
 		} else {
+			console.log(gpioPin1 + ' port opened sucessfully.');
 			gpio.open(gpioPin2, 'input', function(err) {
 				if (err) {
 					console.log(gpioPin2 + ' port open error: ' + err);
 					ecb();
 				} else {
+					console.log(gpioPin2 + ' port opened successfully.');
 					scb();
 				}
 			});
@@ -47,7 +49,7 @@ function getValue(gpioPin, scb, ecb) {
 
 var observation = []; // for containing sensing observations at the same time
 var lastUpdated = 0; // previous updated time
-var timespan = 1000; //  for ignoring rapid updates
+var timespan = 100; //  for ignoring rapid updates
 
 var patternArray = [];
 
@@ -106,7 +108,7 @@ exports.readValuesAsync = function (port, cb) {
                             cb(d, 1);
                             lastUpdated = d.getTime();
                         } else {
-                           console.log('suspicious observation occurred on enter');
+                           console.log('suspicious observation occurred on enter at ' + d.toLocaleTimeString());
                         }
                    }
                    else if (patternArray[0] === 'A' && patternArray[1] === 'C' && patternArray[2] === 'B') {
@@ -115,11 +117,11 @@ exports.readValuesAsync = function (port, cb) {
                             cb(d, -1);
                             lastUpdated = d.getTime();
                         } else {
-                           console.log('suspicious observation occurred on exit');
+                           console.log('suspicious observation occurred on exit  at ' + d.toLocaleTimeString());
                         }
                    }
                    else {
-                       console.log('invalid pattern found: ' + patternArray);
+                       console.log('invalid pattern found: ' + patternArray + ' at ' + d.toLocaleTimeString());
                    }
                }
                patternArray = []; // reset 
@@ -129,5 +131,9 @@ exports.readValuesAsync = function (port, cb) {
     },
     function() {
           console.log('error on reading ' + port);
+	  gpio.close(port);
+	  // exit with error condition
+	  process.exit(1);
+
     });
 }

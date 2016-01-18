@@ -10,7 +10,7 @@ exports.run = function () {
 	// initialize DB manager
 	dbMgr.setTable('adsl1');
 
-	people_counter.cleanup(gpioPin1, gpioPin2); // release ports if it was used.
+	//people_counter.cleanup(gpioPin1, gpioPin2); // release ports if it was used.
 
 	// XXX: this code is not working properly.
 	process.on('exit', function (code) {
@@ -18,12 +18,17 @@ exports.run = function () {
 		people_counter.cleanup(gpioPin1, gpioPin2);
 	});
 
-	people_counter.initialize(gpioPin1, gpioPin2, function() {
+	people_counter.initialize(gpioPin1, gpioPin2, 
+		function() {
 			console.log('ready to read sensors');
 			readSignalsInfinite();
 		},
 		function () {
 			console.log('failed to initialized');
+			people_counter.cleanup(gpioPin1, gpioPin2);
+			// terminate process with error condition
+			process.exit(1);
+			
 	});
 }
 
