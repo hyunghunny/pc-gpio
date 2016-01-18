@@ -46,15 +46,7 @@ function readSignalsInfinite() {
 
 // try to keep connecting
 setInterval(function() {
-	var ports = [gpioPin1, gpioPin2];
-	//console.log('try to read sensor values...');
-	for (var i = 0; i < ports.length; i++) {
-		//console.log('try to read value at ' + ports[i]);
-		people_counter.readValuesAsync(ports[i], function (timestamp, value) {
-			dbMgr.save(timestamp, value);
-			transmit(timestamp, value); // XXX:add for sensor chart testing
-		});
-	}
+
 	sensorchart.login(id, password, function (obj) {
 		console.log('success to login');
 		transmitter = obj;
