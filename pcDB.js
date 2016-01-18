@@ -12,7 +12,7 @@ exports.hasDB = function () {
 
     var exists = fs.existsSync(dbfile);
     return exists;
-}
+};
 
 exports.createFile = function () {
 
@@ -21,13 +21,13 @@ exports.createFile = function () {
     console.log("Done.");
     console.log("Getting DB file.");
     database = new sqlite3.Database(dbfile);
-}
+};
 
 exports.openFile = function () {
 
     console.log("Getting DB file.");
     database = new sqlite3.Database(dbfile);
-}
+};
 
 exports.createTable = function (defaultTableName) {
     var query = "CREATE TABLE IF NOT EXISTS " + defaultTableName +
@@ -35,7 +35,7 @@ exports.createTable = function (defaultTableName) {
     database.run(query);
     table = defaultTableName;
     console.log(defaultTableName + ' created');
-}
+};
 
 exports.insert = function (timestamp, value) {
     database.serialize(function () {
@@ -46,7 +46,7 @@ exports.insert = function (timestamp, value) {
         });
         stmt.finalize();
     });
-}
+};
 
 // XXX:checking required
 exports.insertAsync = function (timestamp, value, cb) {
@@ -60,79 +60,81 @@ exports.insertAsync = function (timestamp, value, cb) {
           stmt.finalize();
       });
 
-}
+};
 
 
 exports.showTableNames = function () {
     database.all("SELECT name FROM sqlite_master WHERE type = 'table'",
     function (err, rows) {
         if (err) throw err;
-        if (rows.length != 0) {
+        if (rows.length !== 0) {
             rows.forEach(function (row) {
                 console.log('table name: ' + row.name);
             });
         }
     });
-}
+};
 
 exports.getTableName = function () {
-    if (table == '')
+    if (table === '')
         console.log('Table is not loaded');
     else {
 //        console.log('Table ' + table + ' loaded');
         return table;
     }
-}
+};
 
 exports.setTableName = function (tableName) {
     if (typeof tableName === 'string')
         table = tableName;
-}
+};
 
 exports.getDBType = function () {
     return 'people_counter';
-}
+};
 
 exports.find = function (callback, condition) {
     database.serialize(function () {
         //condition은 사용자에게 입력받은 조건(where절)
+        var stmt = '';
         if (typeof condition === 'string') {
-            var stmt = "SELECT * from " + table + " where " + condition;
+            stmt = "SELECT * from " + table + " where " + condition;
         }
         else {
-            var stmt = "SELECT * from " + table;
+            stmt = "SELECT * from " + table;
         }
         database.all(stmt, function (err, rows) {
             if (err) throw err;
-            if (rows.length != 0) {
+            if (rows.length !== 0) {
                 callback(rows);//rows는 array
             }
             else {
                 console.log("Data dose not exists");
             }
         });
-    })
-}
+    });
+};
 // XXX:this function requires verification
 exports.findAsync = function (callback, condition) {
       //condition은 사용자에게 입력받은 조건(where절)
+      var stmt = '';
       if (typeof condition === 'string') {
-          var stmt = "SELECT * from " + table + " where " + condition;
+          stmt = "SELECT * from " + table + " where " + condition;
       }
       else {
-          var stmt = "SELECT * from " + table;
+          stmt = "SELECT * from " + table;
       }
       database.all(stmt, function (err, rows) {
           if (err) throw err;
-          if (rows.length != 0) {
+          if (rows.length !== 0) {
               callback(rows);//rows는 array
           }
           else {
               console.log("Data dose not exists");
           }
       });
-}
+};
 
 exports.closeDB = function () {
     database.close();
-}
+};

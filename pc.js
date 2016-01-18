@@ -1,6 +1,5 @@
 var gpio = require("pi-gpio");
 
-
 var intervalId = 0;
 var durationId = 0;
 
@@ -26,7 +25,7 @@ exports.initialize = function (gpioPin1, gpioPin2, scb, ecb)  {
 
 		}
 	});
-}
+};
 
 exports.cleanup = function (gpioPin1, gpioPin2) {
 	gpio.close(gpioPin1);
@@ -54,24 +53,25 @@ var timespan = 100; //  for ignoring rapid updates
 var patternArray = [];
 
 exports.readValuesAsync = function (port, cb) {
- 
+
     getValue(port, function (value) {
         var obs = { "pin" : port , "value" : value };
 
         observation.push(obs);
-	
+
         if (observation.length == 2) {
-/*        
+/*
             console.log(JSON.stringify(observation[0]) + ":" +
             JSON.stringify(observation[1]));
-*/        
+*/
             var sensor1 = observation[0].value;
             var sensor2 =  observation[1].value;
             var d = new Date();
+						var prev = '';
             if (sensor1 === 1 && sensor2 === 0) {
                 //console.log(d.toLocaleTimeString() + ' : pattern A');
                if (patternArray.length > 0) {
-                   var prev = patternArray.pop(); // look up
+                   prev = patternArray.pop(); // look up
                    if (prev !== 'A' ) {
                        patternArray.push(prev); // restore
                    }
@@ -81,7 +81,7 @@ exports.readValuesAsync = function (port, cb) {
             } else if (sensor1 === 0 && sensor2 === 1) {
                  //console.log(d.toLocaleTimeString() + ' : pattern B');
                if (patternArray.length > 0) {
-                   var prev = patternArray.pop(); // look up
+                   prev = patternArray.pop(); // look up
                    if (prev !== 'B' ) {
                        patternArray.push(prev); // restore
                    }
@@ -91,7 +91,7 @@ exports.readValuesAsync = function (port, cb) {
             }  else if ( sensor1 === 0 && sensor2 === 0) {
                 //console.log(d.toLocaleTimeString() + ' : pattern C');
                if (patternArray.length > 0) {
-                   var prev = patternArray.pop(); // look up
+                   prev = patternArray.pop(); // look up
                    if (prev !== 'C' ) {
                        patternArray.push(prev); // restore
                    }
@@ -124,7 +124,7 @@ exports.readValuesAsync = function (port, cb) {
                        console.log('invalid pattern found: ' + patternArray + ' at ' + d.toLocaleTimeString());
                    }
                }
-               patternArray = []; // reset 
+               patternArray = []; // reset
             }
             observation = []; // reset
         }
@@ -136,4 +136,4 @@ exports.readValuesAsync = function (port, cb) {
 	  process.exit(1);
 
     });
-}
+};
